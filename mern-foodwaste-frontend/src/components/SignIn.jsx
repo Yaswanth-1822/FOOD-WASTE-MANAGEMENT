@@ -15,14 +15,11 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace with your API endpoint as needed.
-      const response = await axios.post('http://localhost:5000/api/signin', {
-        username,
-        password,
-      });
+      // Make API call to backend sign in route
+      const response = await axios.post('http://localhost:5000/api/signin', { username, password });
       console.log("SignIn response:", response.data);
-      // Assuming response.data.user contains the user info:
-      login(response.data.user);
+      // Call login with user data and token from response
+      login(response.data.user, response.data.token);
       navigate('/');
     } catch (err) {
       console.error("SignIn error:", err);

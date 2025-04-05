@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-
+const jwt = require('jsonwebtoken');
 /**
  * POST /api/signup
  * Create a new user with hashed password
@@ -42,21 +42,19 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
   try {
     const { username, password } = req.body;
-
     // Find user by username
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Incorrect username or password' });
     }
-
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Incorrect username or password' });
     }
-
-    // If valid, respond with success
-    return res.status(200).json({ message: 'Sign in successful', user });
+    // Generate JWT token (set your JWT_SECRET in .env)
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return res.status(200).json({ message: 'Sign in successful', user, token });
   } catch (error) {
     console.error('Error in /signin:', error);
     return res.status(500).json({ message: 'Internal server error' });

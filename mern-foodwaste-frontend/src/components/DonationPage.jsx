@@ -1,7 +1,7 @@
 // src/components/DonationPage.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import DonationNavBar from './DonationNavBar';
+import DonationNavBar from './DonationNavBar'; // Ensure DonationNavBar is correctly implemented
 import '../styles/donation.css';
 
 const DonationPage = () => {
@@ -11,15 +11,13 @@ const DonationPage = () => {
     description: '',
     quantity: '',
     quantityUnit: 'Kg',
-    // Removed image field as we'll capture via scanning later.
     timeSinceMade: '',
     madeDate: '',
     expiryDate: '',
-    errors: {} // holds error messages for each field
+    errors: {}
   }]);
   const [location, setLocation] = useState('Vizianagaram');
 
-  // Add a new donation item card
   const handleAddItem = () => {
     setItems([...items, {
       name: '',
@@ -33,12 +31,10 @@ const DonationPage = () => {
     }]);
   };
 
-  // Remove donation item card
   const handleRemoveItem = (index) => {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  // Handle input changes and clear error for that field
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
@@ -48,7 +44,6 @@ const DonationPage = () => {
     setItems(newItems);
   };
 
-  // Validate each donation card
   const validateItems = () => {
     let valid = true;
     const newItems = items.map(item => {
@@ -70,7 +65,7 @@ const DonationPage = () => {
           errors.timeSinceMade = "Time Since Made is required";
           valid = false;
         }
-      } else { // packed
+      } else {
         if (!item.madeDate) {
           errors.madeDate = "Made Date is required";
           valid = false;
@@ -86,14 +81,12 @@ const DonationPage = () => {
     return valid;
   };
 
-  // Handle form submission (upload)
   const handleUpload = async () => {
     if (!validateItems()) {
       alert("Please fill all required fields before submitting.");
       return;
     }
     try {
-      // Remove "errors" field from each item before sending payload
       const payload = {
         donationType,
         items: items.map(item => {
@@ -101,11 +94,16 @@ const DonationPage = () => {
           return { ...data, quantity: Number(data.quantity) };
         })
       };
-
-      const response = await axios.post('http://localhost:5000/api/donations', payload);
+      console.log("Payload:", payload);
+      // Get the token from localStorage (set in AuthContext after login)
+      const token = localStorage.getItem("token");
+      const response = await axios.post('http://localhost:5000/api/donations', payload, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log('Donation response:', response.data);
       alert('Donation uploaded successfully!');
-      // Optionally reset the form after upload
       setItems([{
         name: '',
         description: '',
@@ -117,17 +115,15 @@ const DonationPage = () => {
         errors: {}
       }]);
     } catch (error) {
-      console.error('Error uploading donation:', error);
+      console.error('Error uploading donation:', error.response ? error.response.data : error);
       alert('Error in uploading. Please try again later.');
     }
   };
 
   return (
     <div className="donation-page">
-      {/* Use DonationNavBar with proper black background */}
       <DonationNavBar location={location} setLocation={setLocation} />
 
-      {/* Main Content */}
       <div className="donation-content">
         <div className="donation-header">
           <img 
@@ -143,7 +139,6 @@ const DonationPage = () => {
           </div>
         </div>
 
-        {/* Toggle Buttons */}
         <div className="toggle-buttons">
           <button 
             className={`toggle-btn ${donationType === 'homemade' ? 'active' : ''}`}
@@ -159,7 +154,6 @@ const DonationPage = () => {
           </button>
         </div>
 
-        {/* Donation Form Cards */}
         <div className="items-container">
           {items.map((item, index) => (
             <div className="donation-card" key={index}>
@@ -170,7 +164,7 @@ const DonationPage = () => {
                 <input
                   type="text"
                   placeholder="Enter item name"
-                  value={item.name || ''}
+                  value={item.name}
                   onChange={(e) => handleItemChange(index, 'name', e.target.value)}
                   className={item.errors.name ? 'error' : ''}
                 />
@@ -181,7 +175,7 @@ const DonationPage = () => {
                 <label>Description</label>
                 <textarea
                   placeholder="Enter description"
-                  value={item.description || ''}
+                  value={item.description}
                   onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                   className={item.errors.description ? 'error' : ''}
                 ></textarea>
@@ -194,7 +188,7 @@ const DonationPage = () => {
                   <input
                     type="number"
                     placeholder="Qty"
-                    value={item.quantity || ''}
+                    value={item.quantity}
                     onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                     className={item.errors.quantity ? 'error' : ''}
                   />
@@ -206,21 +200,10 @@ const DonationPage = () => {
                     value={item.quantityUnit}
                     onChange={(e) => handleItemChange(index, 'quantityUnit', e.target.value)}
                   >
-                    {donationType === 'homemade' ? (
-                      <>
-                        <option value="Kg">Kg</option>
-                        <option value="Liters">Liters</option>
-                        <option value="Pcs">Pcs</option>
-                        <option value="Boxes">Boxes</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="Kg">Kg</option>
-                        <option value="Liters">Liters</option>
-                        <option value="Pcs">Pcs</option>
-                        <option value="Boxes">Boxes</option>
-                      </>
-                    )}
+                    <option value="Kg">Kg</option>
+                    <option value="Liters">Liters</option>
+                    <option value="Pcs">Pcs</option>
+                    <option value="Boxes">Boxes</option>
                   </select>
                 </div>
               </div>
@@ -231,7 +214,7 @@ const DonationPage = () => {
                   <input
                     type="text"
                     placeholder="e.g., 2 hrs"
-                    value={item.timeSinceMade || ''}
+                    value={item.timeSinceMade}
                     onChange={(e) => handleItemChange(index, 'timeSinceMade', e.target.value)}
                     className={item.errors.timeSinceMade ? 'error' : ''}
                   />
@@ -243,7 +226,7 @@ const DonationPage = () => {
                     <label>Made Date</label>
                     <input
                       type="date"
-                      value={item.madeDate || ''}
+                      value={item.madeDate}
                       onChange={(e) => handleItemChange(index, 'madeDate', e.target.value)}
                       className={item.errors.madeDate ? 'error' : ''}
                     />
@@ -253,7 +236,7 @@ const DonationPage = () => {
                     <label>Expiry Date</label>
                     <input
                       type="date"
-                      value={item.expiryDate || ''}
+                      value={item.expiryDate}
                       onChange={(e) => handleItemChange(index, 'expiryDate', e.target.value)}
                       className={item.errors.expiryDate ? 'error' : ''}
                     />
@@ -262,7 +245,6 @@ const DonationPage = () => {
                 </>
               )}
 
-              {/* Action Row: Scanner and -/+ Buttons */}
               <div className="action-row">
                 {donationType === 'homemade' ? (
                   <button 
@@ -280,18 +262,8 @@ const DonationPage = () => {
                   </button>
                 )}
                 <div className="side-actions">
-                  <button 
-                    onClick={() => handleRemoveItem(index)} 
-                    className="remove-btn"
-                  >
-                    −
-                  </button>
-                  <button 
-                    onClick={handleAddItem} 
-                    className="add-btn"
-                  >
-                    ＋
-                  </button>
+                  <button onClick={() => handleRemoveItem(index)} className="remove-btn">−</button>
+                  <button onClick={handleAddItem} className="add-btn">＋</button>
                 </div>
               </div>
             </div>
@@ -299,26 +271,23 @@ const DonationPage = () => {
         </div>
 
         <div className="upload-section">
-          <button onClick={handleUpload} className="upload-btn">
-            Upload Food Items
-          </button>
+          <button onClick={handleUpload} className="upload-btn">Upload Food Items</button>
         </div>
       </div>
 
       <div className="extra-info">
         <h2>Why Donate?</h2>
         <p>
-          Donating food not only helps reduce waste, but transforms surplus into hope.
+          Donating food not only helps reduce waste but transforms surplus into hope.
           Every item you donate brings nourishment to someone in need.
           Join us in building a sustainable, caring community.
         </p>
       </div>
-
       <div className="extra-section">
         <h2>Our Impact</h2>
         <p>
-          With thousands of meals served and countless lives touched, our platform is making
-          a real difference. Learn how your contributions are turning into smiles and hope.
+          With thousands of meals served and countless lives touched, our platform is making a real difference.
+          Learn how your contributions are turning into smiles and hope.
         </p>
       </div>
 
