@@ -1,48 +1,131 @@
 // src/components/DonationPage.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import DonationNavBar from './DonationNavBar';
 import '../styles/donation.css';
 
 const DonationPage = () => {
   const [donationType, setDonationType] = useState('homemade');
-  const [items, setItems] = useState([{}]);
+  const [items, setItems] = useState([{
+    name: '',
+    description: '',
+    quantity: '',
+    quantityUnit: 'Kg',
+    // Removed image field as we'll capture via scanning later.
+    timeSinceMade: '',
+    madeDate: '',
+    expiryDate: '',
+    errors: {} // holds error messages for each field
+  }]);
+  const [location, setLocation] = useState('Vizianagaram');
 
+  // Add a new donation item card
   const handleAddItem = () => {
-    setItems([...items, {}]);
+    setItems([...items, {
+      name: '',
+      description: '',
+      quantity: '',
+      quantityUnit: 'Kg',
+      timeSinceMade: '',
+      madeDate: '',
+      expiryDate: '',
+      errors: {}
+    }]);
   };
 
+  // Remove donation item card
   const handleRemoveItem = (index) => {
     setItems(items.filter((_, i) => i !== index));
   };
 
+  // Handle input changes and clear error for that field
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
+    if (newItems[index].errors && newItems[index].errors[field]) {
+      newItems[index].errors[field] = '';
+    }
     setItems(newItems);
   };
 
-  const handleUpload = () => {
-    console.log('Uploading items:', items);
-    alert('Items uploaded (simulated)!');
+  // Validate each donation card
+  const validateItems = () => {
+    let valid = true;
+    const newItems = items.map(item => {
+      let errors = {};
+      if (!item.name) {
+        errors.name = "Item name is required";
+        valid = false;
+      }
+      if (!item.description) {
+        errors.description = "Description is required";
+        valid = false;
+      }
+      if (!item.quantity) {
+        errors.quantity = "Quantity is required";
+        valid = false;
+      }
+      if (donationType === 'homemade') {
+        if (!item.timeSinceMade) {
+          errors.timeSinceMade = "Time Since Made is required";
+          valid = false;
+        }
+      } else { // packed
+        if (!item.madeDate) {
+          errors.madeDate = "Made Date is required";
+          valid = false;
+        }
+        if (!item.expiryDate) {
+          errors.expiryDate = "Expiry Date is required";
+          valid = false;
+        }
+      }
+      return { ...item, errors };
+    });
+    setItems(newItems);
+    return valid;
+  };
+
+  // Handle form submission (upload)
+  const handleUpload = async () => {
+    if (!validateItems()) {
+      alert("Please fill all required fields before submitting.");
+      return;
+    }
+    try {
+      // Remove "errors" field from each item before sending payload
+      const payload = {
+        donationType,
+        items: items.map(item => {
+          const { errors, ...data } = item;
+          return { ...data, quantity: Number(data.quantity) };
+        })
+      };
+
+      const response = await axios.post('http://localhost:5000/api/donations', payload);
+      console.log('Donation response:', response.data);
+      alert('Donation uploaded successfully!');
+      // Optionally reset the form after upload
+      setItems([{
+        name: '',
+        description: '',
+        quantity: '',
+        quantityUnit: 'Kg',
+        timeSinceMade: '',
+        madeDate: '',
+        expiryDate: '',
+        errors: {}
+      }]);
+    } catch (error) {
+      console.error('Error uploading donation:', error);
+      alert('Error in uploading. Please try again later.');
+    }
   };
 
   return (
     <div className="donation-page">
-      {/* NAVBAR */}
-      <nav className="navbar donation-nav">
-        <div className="nav-left">
-          <div className="logo">Food Waste Management</div>
-        </div>
-        <div className="nav-middle">
-          <h2>Donate Food</h2>
-        </div>
-        <div className="nav-right">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/cart" className="nav-link">Cart</Link>
-          <Link to="/signin" className="nav-link">Sign In</Link>
-          <Link to="/signup" className="nav-link">Sign Up</Link>
-        </div>
-      </nav>
+      {/* Use DonationNavBar with proper black background */}
+      <DonationNavBar location={location} setLocation={setLocation} />
 
       {/* Main Content */}
       <div className="donation-content">
@@ -89,7 +172,9 @@ const DonationPage = () => {
                   placeholder="Enter item name"
                   value={item.name || ''}
                   onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+                  className={item.errors.name ? 'error' : ''}
                 />
+                {item.errors.name && <p className="error-text">{item.errors.name}</p>}
               </div>
 
               <div className="form-group">
@@ -98,7 +183,9 @@ const DonationPage = () => {
                   placeholder="Enter description"
                   value={item.description || ''}
                   onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                  className={item.errors.description ? 'error' : ''}
                 ></textarea>
+                {item.errors.description && <p className="error-text">{item.errors.description}</p>}
               </div>
 
               <div className="form-row">
@@ -109,42 +196,73 @@ const DonationPage = () => {
                     placeholder="Qty"
                     value={item.quantity || ''}
                     onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                    className={item.errors.quantity ? 'error' : ''}
                   />
+                  {item.errors.quantity && <p className="error-text">{item.errors.quantity}</p>}
                 </div>
-
-                {donationType === 'homemade' ? (
-                  <div className="form-group half">
-                    <label>Time Since Made</label>
-                    <input
-                      type="text"
-                      placeholder="e.g., 2 hrs"
-                      value={item.timeSinceMade || ''}
-                      onChange={(e) => handleItemChange(index, 'timeSinceMade', e.target.value)}
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div className="form-group half">
-                      <label>Made Date</label>
-                      <input
-                        type="date"
-                        value={item.madeDate || ''}
-                        onChange={(e) => handleItemChange(index, 'madeDate', e.target.value)}
-                      />
-                    </div>
-                    <div className="form-group half">
-                      <label>Expiry Date</label>
-                      <input
-                        type="date"
-                        value={item.expiryDate || ''}
-                        onChange={(e) => handleItemChange(index, 'expiryDate', e.target.value)}
-                      />
-                    </div>
-                  </>
-                )}
+                <div className="form-group half">
+                  <label>Unit</label>
+                  <select 
+                    value={item.quantityUnit}
+                    onChange={(e) => handleItemChange(index, 'quantityUnit', e.target.value)}
+                  >
+                    {donationType === 'homemade' ? (
+                      <>
+                        <option value="Kg">Kg</option>
+                        <option value="Liters">Liters</option>
+                        <option value="Pcs">Pcs</option>
+                        <option value="Boxes">Boxes</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Kg">Kg</option>
+                        <option value="Liters">Liters</option>
+                        <option value="Pcs">Pcs</option>
+                        <option value="Boxes">Boxes</option>
+                      </>
+                    )}
+                  </select>
+                </div>
               </div>
 
-              {/* Action Row: Scanner and +/- Buttons */}
+              {donationType === 'homemade' ? (
+                <div className="form-group">
+                  <label>Time Since Made</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., 2 hrs"
+                    value={item.timeSinceMade || ''}
+                    onChange={(e) => handleItemChange(index, 'timeSinceMade', e.target.value)}
+                    className={item.errors.timeSinceMade ? 'error' : ''}
+                  />
+                  {item.errors.timeSinceMade && <p className="error-text">{item.errors.timeSinceMade}</p>}
+                </div>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label>Made Date</label>
+                    <input
+                      type="date"
+                      value={item.madeDate || ''}
+                      onChange={(e) => handleItemChange(index, 'madeDate', e.target.value)}
+                      className={item.errors.madeDate ? 'error' : ''}
+                    />
+                    {item.errors.madeDate && <p className="error-text">{item.errors.madeDate}</p>}
+                  </div>
+                  <div className="form-group">
+                    <label>Expiry Date</label>
+                    <input
+                      type="date"
+                      value={item.expiryDate || ''}
+                      onChange={(e) => handleItemChange(index, 'expiryDate', e.target.value)}
+                      className={item.errors.expiryDate ? 'error' : ''}
+                    />
+                    {item.errors.expiryDate && <p className="error-text">{item.errors.expiryDate}</p>}
+                  </div>
+                </>
+              )}
+
+              {/* Action Row: Scanner and -/+ Buttons */}
               <div className="action-row">
                 {donationType === 'homemade' ? (
                   <button 
@@ -187,7 +305,6 @@ const DonationPage = () => {
         </div>
       </div>
 
-      {/* Extra Sections */}
       <div className="extra-info">
         <h2>Why Donate?</h2>
         <p>
@@ -205,7 +322,6 @@ const DonationPage = () => {
         </p>
       </div>
 
-      {/* Footer */}
       <footer className="footer">
         <p>&copy; 2025 Food Waste Management. All rights reserved.</p>
         <p>

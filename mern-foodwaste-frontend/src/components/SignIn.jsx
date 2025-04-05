@@ -1,9 +1,9 @@
 // src/components/SignIn.jsx
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-import '../styles/styles.css'; // Adjust the path as needed
+import '../styles/styles.css';
 
 const SignIn = () => {
   const { login } = useContext(AuthContext);
@@ -15,11 +15,14 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace the URL with your actual API endpoint
-      const response = await axios.post('/api/signin', { username, password });
+      // Replace with your API endpoint as needed.
+      const response = await axios.post('http://localhost:5000/api/signin', {
+        username,
+        password,
+      });
       console.log("SignIn response:", response.data);
-      // Simulate successful login; in a real app, use response.data for user info
-      login({ name: response.data.user.name, email: response.data.user.email, profilePic: response.data.user.profilePic });
+      // Assuming response.data.user contains the user info:
+      login(response.data.user);
       navigate('/');
     } catch (err) {
       console.error("SignIn error:", err);
@@ -32,7 +35,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="signin-container">
+    <div className="container signin-container">
       <h2>Sign In</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -57,6 +60,11 @@ const SignIn = () => {
         </div>
         <button type="submit">Sign In</button>
         {error && <p className="error-text">{error}</p>}
+        <div className="links">
+          <Link to="/forgot-password">Forgot Password?</Link>
+          <span> | </span>
+          <Link to="/signup">Sign Up</Link>
+        </div>
       </form>
     </div>
   );

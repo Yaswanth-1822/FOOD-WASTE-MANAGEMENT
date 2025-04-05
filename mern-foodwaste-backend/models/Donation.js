@@ -7,6 +7,8 @@ const DonationSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     quantity: { type: Number, required: true },
+    quantityUnit: { type: String }, // e.g., 'Kg', 'Liters', 'Pcs', 'Boxes'
+    image: { type: Buffer },         // Now storing image as a Buffer
     timeSinceMade: { type: String },
     madeDate: { type: Date },
     expiryDate: { type: Date }

@@ -4,12 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../styles/NavBar.css';
 
-const NavBar = () => {
+const NavBar = ({ customMiddle }) => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    // Navigate to a user profile page
     navigate('/profile');
   };
 
@@ -18,17 +17,20 @@ const NavBar = () => {
       <div className="nav-left">
         <div className="logo">Food Waste Management</div>
       </div>
+      <div className="nav-middle">
+        {customMiddle}
+      </div>
       <div className="nav-right">
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/cart" className="nav-link">Cart</Link>
         <Link 
           to="/donate" 
           className="nav-link donate-link"
-          onClick={(e) => { 
-            if (!auth.isLoggedIn) { 
-              e.preventDefault(); 
-              alert("Please log in to donate food"); 
-            } 
+          onClick={(e) => {
+            if (!auth.isLoggedIn) {
+              e.preventDefault();
+              alert("Please log in to donate food");
+            }
           }}
         >
           Donate Food

@@ -1,8 +1,8 @@
 // src/components/ForgotPassword.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/styles.css';
 import axios from 'axios';
+import '../styles/styles.css';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -13,7 +13,10 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/forgot-password', { username, newPassword });
+      const response = await axios.post('http://localhost:5000/api/forgot-password', {
+        username,
+        newPassword,
+      });
       console.log("ForgotPassword response:", response.data);
       navigate('/signin');
     } catch (err) {
@@ -27,27 +30,27 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="forgotpassword-container">
+    <div className="container forgotpassword-container">
       <h2>Reset Password</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Username</label>
-          <input 
-            type="text" 
-            placeholder="Enter your username" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+          <input
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </div>
         <div className="form-group">
           <label>New Password</label>
-          <input 
-            type="password" 
-            placeholder="Enter new password" 
-            value={newPassword} 
-            onChange={(e) => setNewPassword(e.target.value)} 
-            required 
+          <input
+            type="password"
+            placeholder="Enter new password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
           />
         </div>
         <button type="submit">Reset Password</button>

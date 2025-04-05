@@ -3,6 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
+// import your global styles as needed
 
 const container = document.getElementById('root');
 const root = createRoot(container);
