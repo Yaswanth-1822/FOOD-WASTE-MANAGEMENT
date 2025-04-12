@@ -8,7 +8,7 @@ import SignUp from './components/SignUp';
 import ForgotPassword from './components/ForgotPassword';
 import UserProfile from './components/UserProfile';
 import { AuthContext } from './context/AuthContext';
-
+import ItemDetails from './components/ItemDetails';
 const ProtectedRoute = ({ children }) => {
   const { auth } = useContext(AuthContext);
   if (!auth.isLoggedIn) {
@@ -38,6 +38,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/item/:id" element={<ItemDetails />} />
       </Routes>
     </Router>
   );
