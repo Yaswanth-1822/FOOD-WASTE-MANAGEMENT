@@ -3,13 +3,15 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+
 /**
  * POST /api/signup
- * Create a new user with hashed password
+ * Create a new user with hashed password.
+ * Accepts username, email, password, and optional location.
  */
 router.post('/signup', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, location } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -20,11 +22,12 @@ router.post('/signup', async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
+    // Create a new user, saving the location if provided
     const newUser = new User({
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      location: location ? location.trim() : ''
     });
     await newUser.save();
 
@@ -37,7 +40,8 @@ router.post('/signup', async (req, res) => {
 
 /**
  * POST /api/signin
- * Authenticate a user with username and password
+ * Authenticate a user with username and password.
+ * (This route remains unchanged.)
  */
 router.post('/signin', async (req, res) => {
   try {
@@ -52,7 +56,7 @@ router.post('/signin', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Incorrect username or password' });
     }
-    // Generate JWT token (set your JWT_SECRET in .env)
+    // Generate JWT token (ensure your JWT_SECRET is set in your environment variables)
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     return res.status(200).json({ message: 'Sign in successful', user, token });
   } catch (error) {
@@ -63,7 +67,7 @@ router.post('/signin', async (req, res) => {
 
 /**
  * POST /api/forgot-password
- * Update user password given username and new password
+ * Update user password given username and new password.
  */
 router.post('/forgot-password', async (req, res) => {
   try {

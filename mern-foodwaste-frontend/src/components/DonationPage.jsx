@@ -16,6 +16,7 @@ const DonationPage = () => {
     expiryDate: '',
     errors: {}
   }]);
+  // Location state to be sent along with donation
   const [location, setLocation] = useState('Vizianagaram');
 
   const handleAddItem = () => {
@@ -89,21 +90,23 @@ const DonationPage = () => {
     try {
       const payload = {
         donationType,
+        // Map items to remove errors and convert quantity to Number
         items: items.map(item => {
           const { errors, ...data } = item;
           return { ...data, quantity: Number(data.quantity) };
-        })
+        }),
+        location  // Include the user's location with the donation
       };
       console.log("Payload:", payload);
       // Get the token from localStorage (set in AuthContext after login)
       const token = localStorage.getItem("token");
-      const response = await axios.post('http://localhost:5000/api/donations', payload, {
+      const response = await axios.post('http://localhost:5000/api/pending-donations', payload, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
       console.log('Donation response:', response.data);
-      alert('Donation uploaded successfully!');
+      alert('Donation submitted for admin approval successfully!');
       setItems([{
         name: '',
         description: '',

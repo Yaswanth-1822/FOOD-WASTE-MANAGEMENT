@@ -1,0 +1,26 @@
+.admin-settings {
+    padding: 20px;
+  }
+  
+  .settings-card {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 14px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+  }
+  
+  .settings-card button {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .settings-card.disabled button {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  

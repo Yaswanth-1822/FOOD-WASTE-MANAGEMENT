@@ -1,0 +1,30 @@
+.users-mgmt {
+    padding: 20px;
+  }
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  .users-table th, .users-table td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+  }
+  .users-table th {
+    background: #f0f0f0;
+  }
+  .filters {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .filters input {
+    padding: 8px;
+    flex: 1;
+  }
+  
+  .filters select {
+    padding: 8px;
+  }
+  

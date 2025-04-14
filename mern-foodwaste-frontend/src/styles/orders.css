@@ -1,0 +1,25 @@
+.orders-mgmt { padding:2rem; background:#fafafa; }
+.orders-table { width:100%; border-collapse:collapse; }
+.orders-table th, .orders-table td { padding:0.75rem; border-bottom:1px solid #eee; }
+.orders-table select { width:100%; padding:0.5rem; }
+.orders-table button { padding:0.5rem 1rem; background:#27ae60; color:#fff; border:none; border-radius:4px; }
+.orders-table button:hover { background:#219150; }
+.error-banner {
+    padding: 1rem;
+    background: #ffebee;
+    color: #c62828;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+  
+  .loading {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+  }
+  
+  .no-orders {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+  }

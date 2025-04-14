@@ -1,0 +1,150 @@
+/* Container */
+.admin-analytics {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+}
+
+.admin-analytics h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+/* Date filters */
+.date-filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.date-input {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Summary cards */
+.summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.card {
+  flex: 1 1 200px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.card-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+.card-info p {
+  margin: 0;
+  color: #7f8c8d;
+}
+
+/* Charts container */
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Bar chart card: flex center */
+.chart-box.bar {
+  flex: 1 1 48%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  align-items: center;     /* center horizontally */
+  padding: 1.5rem;
+}
+
+/* Bar wrapper takes remaining space and centers bars */
+.chart-box.bar .bar-wrapper {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center; /* center bars vertically */
+}
+
+/* Pie chart card */
+.chart-box.pie {
+  flex: 1 1 48%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 1.5rem;
+}
+.chart-box.pie .pie-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  min-height: 300px;
+}
+
+/* Top donors list */
+.top-donors-list {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.top-donors-list h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+.top-donors-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.top-donors-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #f1f1f1;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.top-donors-list li:hover {
+  background: #e1eaff;
+}
+.rank {
+  font-weight: bold;
+  width: 30px;
+  color: #333;
+}
+.name {
+  flex: 1;
+  text-align: center;
+  color: #2c3e50;
+}
+.count {
+  color: #555;
+  width: 50px;
+  text-align: right;
+}
