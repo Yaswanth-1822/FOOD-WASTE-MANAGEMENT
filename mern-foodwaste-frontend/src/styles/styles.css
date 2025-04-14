@@ -1,90 +1,178 @@
-/* src/styles/styles.css */
-
-/* Reset some default browser styles */
+/* General Reset and Font */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Basic body styling */
-  body {
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
-  }
-  
-  /* Container for forms/pages */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Full-screen Layout */
+body, html {
+  height: 100%;
+  background-color: #fff3e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form Container */
+.container {
+  width: 100%;
+  max-width: 1000px;
+  min-width: 500px;
+  padding: 40px 30px;
+  background: linear-gradient(135deg, rgba(255, 224, 178, 0.9), rgba(255, 204, 188, 0.9)),
+              url('../assets/donation_background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(255, 112, 67, 0.3);
+  animation: slideUpFade 1s ease-out;
+}
+
+/* Heading */
+h2 {
+  text-align: center;
+  font-size: 32px;
+  color: #ff5722;
+  margin-bottom: 30px;
+  font-weight: 700;
+  animation: slideDownFade 1s ease-out;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Input Styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+input {
+  padding: 14px 16px;
+  border: 2px solid #ffc1a1;
+  border-radius: 40px;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+input:focus {
+  border-color: #ff7043;
+  box-shadow: 0 0 5px rgba(255, 112, 67, 0.3);
+  outline: none;
+}
+
+/* Submit Button */
+button {
+  background-color: #ff7043;
+  color: white;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeInUp 1.3s ease;
+}
+
+button:hover {
+  background-color: #e65100;
+  transform: translateY(-2px);
+}
+
+/* Error Message */
+.error,
+.error-text {
+  color: red;
+  text-align: center;
+  font-size: 15px;
+  animation: shake 0.3s ease;
+}
+
+/* Links (Sign Up & Forgot Password) */
+.links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: -10px;
+  font-size: 14px;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.links a {
+  color: #ff7043;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: #e65100;
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
   .container {
-    width: 400px;
-    max-width: 90%;
-    margin: 80px auto;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 30px 20px;
   }
-  
-  /* Page heading */
-  .container h2 {
-    text-align: center;
-    margin-bottom: 20px;
+
+  h2 {
+    font-size: 26px;
   }
-  
-  /* Form groups */
-  .form-group {
-    margin-bottom: 15px;
+
+  input {
+    font-size: 14px;
   }
-  
-  .form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* Button styling */
+
   button {
-    width: 100%;
-    padding: 12px;
-    background: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     font-size: 16px;
-    margin-top: 10px;
   }
-  
-  button:hover {
-    background: #0056b3;
-  }
-  
-  /* Links */
+
   .links {
-    text-align: center;
-    margin-top: 15px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
   }
-  
-  .links a {
-    color: #007bff;
-    text-decoration: none;
-    margin: 0 5px;
-  }
-  
-  .links a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Error message styling */
-  .error {
-    color: red;
-    margin-top: 10px;
-    text-align: center;
-  }
-  
+}

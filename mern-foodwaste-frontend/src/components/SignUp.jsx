@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/styles.css';
 
@@ -66,6 +66,11 @@ const SignUp = () => {
         </div>
         <button type="submit">Create Account</button>
         {error && <p className="error">{error}</p>}
+
+        {/* Already have an account link */}
+        <div className="links" style={{ justifyContent: 'center', marginTop: '10px' }}>
+          <span>Already have an account? <Link to="/signin">Sign In</Link></span>
+        </div>
       </form>
     </div>
   );
