@@ -1,4 +1,4 @@
-// mern-foodwaste-backend/models/Donation.js
+// models/Donation.js
 const mongoose = require('mongoose');
 
 const DonationSchema = new mongoose.Schema({
@@ -7,13 +7,14 @@ const DonationSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     quantity: { type: Number, required: true },
-    quantityUnit: { type: String }, // e.g., 'Kg', 'Liters', 'Pcs', 'Boxes'
-    image: { type: Buffer },         // Now storing image as a Buffer
+    quantityUnit: { type: String },
+    image: { type: Buffer },
     timeSinceMade: { type: String },
     madeDate: { type: Date },
     expiryDate: { type: Date }
   }],
   donor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  location: { type: String, required: true }, // New field to store the donor's location
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -1,0 +1,17 @@
+.notifications-tab {
+    padding: 20px;
+  }
+  
+  .notifications-tab ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .notifications-tab li {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid #3498db;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  

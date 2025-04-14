@@ -1,0 +1,6 @@
+.delivery-mgmt { padding:2rem; background:#f5f7fa; }
+.dp-form input { margin-right:0.5rem; padding:0.5rem; }
+.dp-table { width:100%; border-collapse:collapse; }
+.dp-table th, .dp-table td { padding:0.75rem; border-bottom:1px solid #ddd; }
+.status.available   { color: #27ae60; font-weight:600; }
+.status.unavailable { color: #c0392b; font-weight:600; }

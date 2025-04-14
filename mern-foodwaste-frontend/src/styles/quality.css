@@ -1,0 +1,45 @@
+.qc-container {
+    padding: 20px;
+  }
+  
+  .qc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+  
+  .qc-card {
+    background: #fff;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .qc-card h3 {
+    margin-top: 0;
+  }
+  
+  .qc-btns {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .qc-btns button {
+    padding: 6px 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .approve {
+    background: #27ae60;
+    color: white;
+  }
+  
+  .reject {
+    background: #c0392b;
+    color: white;
+  }
+  

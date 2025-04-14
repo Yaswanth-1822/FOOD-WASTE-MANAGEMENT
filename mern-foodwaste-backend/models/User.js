@@ -15,6 +15,16 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  role: { 
+    type: String, 
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  // New field to store the user's location
+  location: {
+    type: String,
+    default: ''
   }
 }, { timestamps: true });
 
