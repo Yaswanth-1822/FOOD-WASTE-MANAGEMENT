@@ -8,11 +8,10 @@ import SignUp         from './components/SignUp';
 import ForgotPassword from './components/ForgotPassword';
 import UserProfile    from './components/UserProfile';
 import ItemDetails    from './components/ItemDetails';
-import OrderPage    from './components/OrderPage';
 import AdminLanding   from './components/AdminLanding';  // ← import admin
 
 import { AuthContext } from './context/AuthContext';
-
+import ItemDetails from './components/ItemDetails';
 const ProtectedRoute = ({ children }) => {
   const { auth } = useContext(AuthContext);
   if (!auth.isLoggedIn) {
@@ -32,7 +31,6 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/item/:id" element={<ItemDetails />} />
-        <Route path="/order/:id" element={<OrderPage />} />
 
         {/* Protected user route */}
         <Route 
@@ -46,9 +44,7 @@ function App() {
 
         {/* Profile */}
         <Route path="/profile" element={<UserProfile />} />
-
-        {/* Admin landing */}
-        <Route path="/admin" element={<AdminLanding />} />
+        <Route path="/item/:id" element={<ItemDetails />} />
       </Routes>
     </Router>
   );

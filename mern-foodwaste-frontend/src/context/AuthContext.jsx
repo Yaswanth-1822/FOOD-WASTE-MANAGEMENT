@@ -1,20 +1,38 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({ isLoggedIn: false, user: null, token: null });
+  const [auth, setAuth] = useState({
+    isLoggedIn: false,
+    user: null,
+    token: null
+  });
 
-  // Load auth data from localStorage on app initialization.
+  // On app start, load token & user from localStorage, then re‑fetch user profile
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    if (storedToken && storedUser) {
-      setAuth({
-        isLoggedIn: true,
-        token: storedToken,
-        user: JSON.parse(storedUser),
+    if (storedToken) {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      setAuth({ isLoggedIn: true, user: storedUser, token: storedToken });
+
+      // Refresh user profile (to get latest location, etc.)
+      axios.get('http://localhost:5000/api/users/me', {
+        headers: { Authorization: `Bearer ${storedToken}` }
+      })
+      .then(res => {
+        setAuth(a => ({
+          ...a,
+          user: res.data
+        }));
+        localStorage.setItem('user', JSON.stringify(res.data));
+      })
+      .catch(() => {
+        // token might be invalid
+        setAuth({ isLoggedIn: false, user: null, token: null });
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
       });
     }
   }, []);

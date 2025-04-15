@@ -1,8 +1,12 @@
-const mongoose = require('mongoose'); // Add this at the top
+const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [{ donationId: String, itemIndex: Number }],
+  location: {
+    type: String,
+    required: true
+  },
   assignedTo: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'DeliveryPerson', 

@@ -9,9 +9,24 @@ const sendMail = require('../utils/sendMail');
 // Create
 router.post('/orders', async (req, res) => {
   try {
-    const { user, items } = req.body;
-    const order = new Order({ user, items });
+    const { user, items, location } = req.body;
+    if (!location) {
+      return res.status(400).json({ message: 'Location is required' });
+    }
+
+    const order = new Order({ user, items, location });
     await order.save();
+
+    // Optionally notify user
+    const u = await User.findById(user);
+    if (u && u.email) {
+      await sendMail(
+        u.email,
+        'Order Received',
+        `Hi ${u.username},\n\nWe received your order and will process it shortly.\n\nLocation: ${location}`
+      );
+    }
+
     res.status(201).json(order);
   } catch (err) {
     res.status(400).json({ message: err.message });
